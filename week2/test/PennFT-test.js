@@ -37,6 +37,27 @@ describe("PennFT contract", function () {
       expect(await token721.tokenCount()).to.equal(2);
     });
 
-    // todo: write more test cases
+    it("Should return the correct number of tokens in existence", async function () {
+      const address1 = account1.address;
+      await token721.mintNFT(address1, "1");
+      expect(await token721.tokenCount()).to.equal(1);
+    })
+
+    it("Should be able to return string URI values", async function () {
+      const address1 = account1.address;
+      await token721.mintNFT(address1, "1");
+      expect(await token721.tokenURI(1)).to.equal("1");
+    })
+
+    it("Should have 0 tokens at initalization", async function () {
+      expect(await token721.tokenCount()).to.equal(0);
+    })
+
+    it("Should be able to return string URI values", async function () {
+      const address1 = account1.address;
+      await token721.mintNFT(address1, "bingus");
+      expect(await token721.ownerOf(1)).to.equal(address1);
+      expect(await token721.tokenURI(1)).to.equal("bingus");
+    })
   });
 });

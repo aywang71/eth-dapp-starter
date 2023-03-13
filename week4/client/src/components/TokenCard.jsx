@@ -60,8 +60,8 @@ export default function TokenCard({
               {token.status === "Not Started"
                 ? "Minimum Bid"
                 : token.status === "Ongoing"
-                ? "Highest Bid"
-                : "Final Bid"}
+                  ? "Highest Bid"
+                  : "Final Bid"}
               : {token.price} PennCoin
             </Text>
             {token.status === "Ended" && (
@@ -77,13 +77,33 @@ export default function TokenCard({
               ""
             )
           ) : token.status === "Ongoing" ? (
-            {
-              /* TODO: Allow the user to input some amount of PennCoin to bid */
-            }
+
+            token.owner === address ? (
+              <Button size="xl" onClick={endAuction}>
+                End
+              </Button>
+            ) : (
+              ""
+            )
+
+              (<NumberInput
+                placeholder="You bid"
+                size="xl"
+                min={token.price}
+                step={1}
+                value={bid}
+                onChange={setBid}
+              />)
+
+              (<Button size="xl" onClick={submitBid(bid)}>
+                Bid
+              </Button>)
+
+
           ) : (
-            {
-              /* TODO: Allow the user to withdraw their bids */
-            }
+            (<Button size="xl" onClick={withdraw}>
+              Withdraw
+            </Button>)
           )}
         </Flex>
       </Flex>

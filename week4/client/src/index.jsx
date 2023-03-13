@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import Home from "./pages/Home";
 import { MantineProvider } from "@mantine/core";
+import TokenCard from "./components/TokenCard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -25,7 +26,8 @@ root.render(
         },
       }}
     >
-      <Home />
+      {/* <Home /> */}
+      <TokenCard/> 
     </MantineProvider>
   </React.StrictMode>
 );

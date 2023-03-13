@@ -151,15 +151,19 @@ export default function Home() {
   };
 
   const submitBid = async (bid) => {
-    // TODO: alter this to submit the user's bid to the contract
+    await coinContract.functions.approve(AUCTION_ADDRESS, bid);
+    await auctionContract.functions.bid(bid);
+    await getTokenData();
   };
 
   const endAuction = async () => {
-    // TODO: alter this to end the auction
+    await auctionContract.functions.end();
+    await getTokenData();
   };
 
   const withdraw = async () => {
-    // TODO: alter this to withdraw the user's winnings
+    await auctionContract.functions.withdraw();
+    await getTokenData();
   };
 
   return (

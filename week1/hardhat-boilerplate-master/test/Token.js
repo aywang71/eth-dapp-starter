@@ -77,6 +77,34 @@ describe("Token contract", function () {
         .to.changeTokenBalances(hardhatToken, [addr1, addr2], [-50, 50]);
     });
 
+    it("Should not change balance of owner account", async function() {
+      const { hardhatToken, owner, addr1, addr2 } = await loadFixture(deployTokenFixture);
+      
+      await expect(hardhatToken.transfer(addr1.address, 50))
+        .to.changeTokenBalances(hardhatToken, [owner, addr1], [-50, 50]);
+
+      await expect(hardhatToken.connect(addr1).transfer(addr2.address, 50))
+        .to.changeTokenBalances(hardhatToken, [owner, addr2], [0, 50]);
+    });
+
+    it("Should allow multiple back and forth transfers", async function() {
+      const { hardhatToken, owner, addr1, addr2 } = await loadFixture(deployTokenFixture);
+
+      const initialOwnerBalance = await hardhatToken.balanceOf(
+        owner.address
+      );
+
+      await expect(hardhatToken.transfer(addr1.address, 50))
+        .to.changeTokenBalances(hardhatToken, [owner, addr1], [-50, 50]);
+
+        await expect(hardhatToken.connect(addr1).transfer(owner.address, 50))
+        .to.changeTokenBalances(hardhatToken, [addr1, owner], [-50, 50]);
+
+        expect(await hardhatToken.balanceOf(owner.address)).to.equal(
+          initialOwnerBalance
+        );
+    })
+
     it("should emit Transfer events", async function () {
       const { hardhatToken, owner, addr1, addr2 } = await loadFixture(deployTokenFixture);
 

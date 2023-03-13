@@ -35,6 +35,13 @@ describe("Test Start()", function () {
       englishAuction.connect(buyer1).start()
     ).to.be.reverted;
   });
+
+  it("Cannot start auction twice", async function () {
+    await englishAuction.connect(seller).start();
+    await expect(
+      englishAuction.connect(seller).start()
+    ).to.be.reverted;
+  })
 });
 
 describe("Test Bid()", function () {    
@@ -45,6 +52,16 @@ describe("Test Bid()", function () {
     await englishAuction.connect(buyer1).bid(50);
     assert(await englishAuction.highestBid() == 50, "bid amount is correct");
     assert(await englishAuction.highestBidder() == buyer1.address, "highest bidder changed");
+  });
+  
+  it("Basic bid two times", async function () {
+    await englishAuction.connect(seller).start();
+    await PennCoin.connect(buyer1).approve(englishAuction.address, 50);
+    await englishAuction.connect(buyer1).bid(50);
+    await PennCoin.connect(buyer2).approve(englishAuction.address, 100);
+    await englishAuction.connect(buyer2).bid(100);
+    assert(await englishAuction.highestBid() == 100, "bid amount is correct");
+    assert(await englishAuction.highestBidder() == buyer2.address, "highest bidder changed");
   });
 
   it("Should not allow a bidder to bid lower than the highest bid", async function () {
@@ -57,6 +74,12 @@ describe("Test Bid()", function () {
     
     assert(await expect(englishAuction.connect(buyer2).bid(40), "value < highest bid"));
   });
+
+  it("Should not allow a bid when the auction has not started", async function () {
+    await expect(
+      englishAuction.connect(buyer1).bid(50)
+    ).to.be.reverted;
+  })
 
 });
 
@@ -104,4 +127,10 @@ describe("Test End()", function () {
     await englishAuction.connect(seller).end();
     assert(await PennFT.ownerOf(PennFT_id) == seller.address, "nft was transfered back to seller")
   });
+
+  it("Cannot end auction if it has not started",  async function () {
+    await expect(
+      englishAuction.connect(buyer1).end()
+    ).to.be.reverted;
+  })
 });
