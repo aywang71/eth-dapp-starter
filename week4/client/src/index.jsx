@@ -26,8 +26,8 @@ root.render(
         },
       }}
     >
-      {/* <Home /> */}
-      <TokenCard/> 
+      <Home /> 
+      {/* <TokenCard/> */}
     </MantineProvider>
   </React.StrictMode>
 );

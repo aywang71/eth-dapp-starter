@@ -39,7 +39,7 @@ export default function TokenCard({
     }
   }, [token]);
 
-  if (token === null) {
+  if (!token) {
     return <></>;
   }
 
@@ -85,20 +85,18 @@ export default function TokenCard({
             ) : (
               ""
             )
+            (<NumberInput
+              placeholder="You bid"
+              size="xl"
+              min={token.price}
+              step={1}
+              value={bid}
+              onChange={setBid}
+            />)
 
-              (<NumberInput
-                placeholder="You bid"
-                size="xl"
-                min={token.price}
-                step={1}
-                value={bid}
-                onChange={setBid}
-              />)
-
-              (<Button size="xl" onClick={submitBid(bid)}>
-                Bid
-              </Button>)
-
+            (<Button size="xl" onClick={submitBid(bid)}>
+              Bid
+            </Button>)
 
           ) : (
             (<Button size="xl" onClick={withdraw}>
